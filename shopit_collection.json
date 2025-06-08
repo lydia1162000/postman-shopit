@@ -1,0 +1,780 @@
+{
+	"info": {
+		"_postman_id": "e69b01b3-3f4a-491e-9a76-67f687405f9f",
+		"name": "shopit.qacart website",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "45067709",
+		"_collection_link": "https://testing-9912.postman.co/workspace/shopit.qacart~f4526264-fc4e-4044-83b7-79be1499dbb3/collection/45067709-e69b01b3-3f4a-491e-9a76-67f687405f9f?action=share&source=collection_link&creator=45067709"
+	},
+	"item": [
+		{
+			"name": "users",
+			"item": [
+				{
+					"name": "register",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"\r",
+									"// Save actual values to environment variables\r",
+									"pm.environment.set(\"NAME\",pm.variables.replaceIn(\"{{$randomFirstName}}\"));\r",
+									"pm.environment.set(\"EMAIL\",pm.variables.replaceIn(\"{{$randomEmail}}\"));\r",
+									"pm.environment.set(\"PASSWORD\",pm.variables.replaceIn(\"{{$randomPassword}}\"));\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.environment.set(\"TOKEN\",pm.response.json().token);\r",
+									"\r",
+									"pm.test(\"Status code is 201 - created\",function(){\r",
+									"pm.response.to.have.status(201);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response Contains Token\",function(){\r",
+									"var jsonData = pm.response.json();\r",
+									"pm.expect(jsonData.token).to.be.a(\"String\")\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Token format is valid JWT\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    const jwtFormat = /^[A-Za-z0-9-_]+\\.[A-Za-z0-9-_]+\\.[A-Za-z0-9-_]+$/;\r",
+									"    pm.expect(jsonData.token).to.match(jwtFormat);\r",
+									"});\r",
+									"pm.test(\"Response time is less than 1000ms\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(1000);\r",
+									"});\r",
+									"pm.test(\"Response contains user ID\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.user._id).to.be.a(\"string\");\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Token in a non-empty string\",function(){\r",
+									"    const jsonData =pm.response.json();\r",
+									"    pm.expect(jsonData.token).to.be.a(\"string\").and.not.empty;\r",
+									"})\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"name\": \"{{NAME}}\",\r\n  \"email\": \"{{EMAIL}}\",\r\n  \"password\": \"{{PASSWORD}}\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/api/v1/register",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.environment.set(\"TOKEN\",pm.response.json().token);\r",
+									"\r",
+									"pm.test(\"Status code is 200 - created\",function(){\r",
+									"pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response Contains Token\",function(){\r",
+									"var jsonData = pm.response.json();\r",
+									"pm.expect(jsonData.token).to.be.a(\"String\")\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Token format is valid JWT\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    const jwtFormat = /^[A-Za-z0-9-_]+\\.[A-Za-z0-9-_]+\\.[A-Za-z0-9-_]+$/;\r",
+									"    pm.expect(jsonData.token).to.match(jwtFormat);\r",
+									"});\r",
+									"pm.test(\"Response time is less than 1000ms\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(1000);\r",
+									"});\r",
+									"pm.test(\"Response contains user ID\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.user._id).to.be.a(\"string\");\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Token in a non-empty string\",function(){\r",
+									"    const jsonData =pm.response.json();\r",
+									"    pm.expect(jsonData.token).to.be.a(\"string\").and.not.empty;\r",
+									"})\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {}
+					},
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "",
+								"value": "",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"email\": \"{{EMAIL}}\",   \r\n  \"password\": \"{{PASSWORD}}\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/api/v1/login",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get user profile",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200 - OK\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"let jsonData = pm.response.json();\r",
+									"\r",
+									"pm.test(\"User object is present\", function () {\r",
+									"    pm.expect(jsonData).to.have.property(\"user\");\r",
+									"    pm.expect(jsonData.user).to.be.an(\"object\");\r",
+									"});\r",
+									"pm.test(\"User object contains required fields\", function () {\r",
+									"    const user = jsonData.user;\r",
+									"    pm.expect(user).to.have.property(\"_id\").that.is.a(\"string\");\r",
+									"    pm.expect(user).to.have.property(\"name\").that.is.a(\"string\");\r",
+									"    pm.expect(user).to.have.property(\"email\").that.includes(\"@\");\r",
+									"    pm.expect(user).to.have.property(\"role\").that.is.oneOf([\"user\", \"admin\"]);\r",
+									"    pm.expect(user).to.have.property(\"createdAt\");\r",
+									"    pm.expect(user).to.have.property(\"updatedAt\");\r",
+									"});\r",
+									"pm.test(\"User email format is valid\", function () {\r",
+									"    const email = jsonData.user.email;\r",
+									"    const emailRegex = /^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/;\r",
+									"    pm.expect(email).to.match(emailRegex);\r",
+									"});\r",
+									"pm.test(\"User role is valid\", function () {\r",
+									"    pm.expect(jsonData.user.role).to.be.oneOf([\"user\", \"admin\"]);\r",
+									"});\r",
+									"pm.environment.set(\"USER_ID\", jsonData.user._id);\r",
+									"pm.environment.set(\"ROLE\",jsonData.user.role)\r",
+									"\r",
+									"//performance test\r",
+									"pm.test(\"Response time is less than 1000ms\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(1000);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{BASE_URL}}/api/v1/me",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"me"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update user profile",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"// Parse the raw JSON body as an object\r",
+									"let body = JSON.parse(pm.request.body.raw);\r",
+									"\r",
+									"// Access fields\r",
+									"let email = body.email;\r",
+									"let name = body.name;\r",
+									"\r",
+									"// You can also store them as environment variables\r",
+									"pm.environment.set(\"EMAIL\", email);\r",
+									"pm.environment.set(\"NAME\", name);\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200 - OK\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"\",\r\n    \"name\": \"\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/api/v1/me/update",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"me",
+								"update"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update user password",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"// Parse the raw JSON body as an object\r",
+									"let body = JSON.parse(pm.request.body.raw);\r",
+									"\r",
+									"// Access fields\r",
+									"let password = body.password;\r",
+									"\r",
+									"// You can also store them as environment variables\r",
+									"pm.environment.set(\"PASSWORD\", password);\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200 - OK\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"oldPassword\": \"{{PASSWORD}}\",\r\n    \"password\": \"rHltdMwQmfP4usfa\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/api/v1/password/update",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"password",
+								"update"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "products",
+			"item": [
+				{
+					"name": "get all products",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const jsonData = pm.response.json();\r",
+									"\r",
+									"if (jsonData.products.length >= 2) {\r",
+									"    pm.environment.set(\"PRODUCT1\", jsonData.products[0]._id);\r",
+									"    pm.environment.set(\"PRODUCT2\", jsonData.products[1]._id);\r",
+									"} else {\r",
+									"    console.warn(\"Not enough products in the response to set both variables.\");\r",
+									"}\r",
+									"\r",
+									"\r",
+									"pm.test(\"Status code is 200\",function(){\r",
+									"pm.response.to.have.status(200);\r",
+									"})\r",
+									"\r",
+									"pm.test(\"Contains resPerPage, count, and products array\", function () {\r",
+									"    pm.expect(jsonData).to.have.property(\"resPerPage\");\r",
+									"    pm.expect(jsonData).to.have.property(\"count\");\r",
+									"    pm.expect(jsonData).to.have.property(\"products\").that.is.an(\"array\");\r",
+									"});\r",
+									"pm.test(\"Pagination values are correct\", function () {\r",
+									"    pm.expect(jsonData.resPerPage).to.be.a(\"number\");\r",
+									"    pm.expect(jsonData.count).to.be.a(\"number\");\r",
+									"    pm.expect(jsonData.products.length).to.be.at.most(jsonData.resPerPage);\r",
+									"});\r",
+									"\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{BASE_URL}}/api/v1/products?page=1&keyword=",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"products"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "1"
+								},
+								{
+									"key": "keyword",
+									"value": ""
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get single product",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"let jsonData = pm.response.json();\r",
+									"\r",
+									"pm.test(\"Product object is present\", function () {\r",
+									"    pm.expect(jsonData).to.have.property(\"product\");\r",
+									"    pm.expect(jsonData.product).to.be.an(\"object\");\r",
+									"});\r",
+									"pm.test(\"Each image has public_id and url\", function () {\r",
+									"    jsonData.product.images.forEach(image => {\r",
+									"        pm.expect(image).to.have.property(\"public_id\");\r",
+									"        pm.expect(image).to.have.property(\"url\");\r",
+									"    });\r",
+									"});\r",
+									"pm.test(\"Ratings are between 0 and 5\", function () {\r",
+									"    let rating = jsonData.product.ratings;\r",
+									"    pm.expect(rating).to.be.within(0, 5);\r",
+									"});\r",
+									"pm.test(\"Each review has user, rating, and comment\", function () {\r",
+									"    jsonData.product.reviews.forEach(review => {\r",
+									"        pm.expect(review).to.have.property(\"rating\").that.is.a(\"number\");\r",
+									"        pm.expect(review).to.have.property(\"comment\").that.is.a(\"string\");\r",
+									"    });\r",
+									"});\r",
+									"pm.test(\"Response time is below 1000ms\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(1000);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{BASE_URL}}/api/v1/products/{{PRODUCT1}}",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"products",
+								"{{PRODUCT1}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update single product review",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"// Generate a random rating between 0 and 5\r",
+									"const rating = Math.floor(Math.random() * 6);\r",
+									"pm.environment.set(\"RATING\", rating);\r",
+									"\r",
+									"// Get role from environment variable\r",
+									"let role = pm.environment.get(\"ROLE\");\r",
+									"\r",
+									"if (role === \"user\") {\r",
+									"   \r",
+									"    postman.setNextRequest(null);  // Stops the request chain\r",
+									"    console.log(\"User role is not allowed to add a review.\");\r",
+									"    throw new Error(\"Permission denied: Only admin can add a review.\");\r",
+									"}\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"rating\": \"{{RATING}}\",\r\n    \"comment\": \"Great\",\r\n    \"productId\":\"{{PRODUCT1}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/api/v1/reviews",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"reviews"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "orders",
+			"item": [
+				{
+					"name": "get all orders",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"let jsonData = pm.response.json();\r",
+									"\r",
+									"\r",
+									"\r",
+									"// Check if orders exist and are an array\r",
+									"if (Array.isArray(jsonData.orders) && jsonData.orders.length > 0) {\r",
+									"    let itemIds = [];\r",
+									"\r",
+									"    jsonData.orders.forEach((order, index) => {\r",
+									"        if (Array.isArray(order.orderItems) && order.orderItems.length > 0) {\r",
+									"            const itemId = order.orderItems[0]._id;\r",
+									"            itemIds.push(itemId);\r",
+									"\r",
+									"            // Optionally store individual ones for convenience\r",
+									"            pm.environment.set(`ORDER_ITEM_${index + 1}`, itemId);\r",
+									"        }\r",
+									"    });\r",
+									"    // if (itemIds.length > 0) {\r",
+									"    //     // Save all IDs as array\r",
+									"    //     pm.environment.set(\"ORDER_ITEM_LIST\", JSON.stringify(itemIds));\r",
+									"    //     console.log(\"Order item IDs saved:\", itemIds);\r",
+									"    // } else {\r",
+									"    //     console.warn(\"Orders found but no orderItems in any of them.\");\r",
+									"    // }\r",
+									"} else {\r",
+									"    console.warn(\"No orders found in response.\");\r",
+									"   // pm.environment.unset(\"ORDER_ITEM_LIST\");\r",
+									"}\r",
+									"\r",
+									"\r",
+									"pm.test(\"Status code is 200 - OK\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Orders array is present and not empty\", function () {\r",
+									"    pm.expect(jsonData).to.have.property(\"orders\").that.is.an(\"array\").with.length.above(0);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{BASE_URL}}/api/v1/me/orders",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"me",
+								"orders"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get single order",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200 - OK\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{BASE_URL}}/api/v1/orders/{{ORDER_ITEM_1}}",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"orders",
+								"{{ORDER_ITEM_1}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
