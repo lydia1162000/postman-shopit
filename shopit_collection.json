@@ -266,16 +266,6 @@
 							"listen": "prerequest",
 							"script": {
 								"exec": [
-									"// Parse the raw JSON body as an object\r",
-									"let body = JSON.parse(pm.request.body.raw);\r",
-									"\r",
-									"// Access fields\r",
-									"let email = body.email;\r",
-									"let name = body.name;\r",
-									"\r",
-									"// You can also store them as environment variables\r",
-									"pm.environment.set(\"EMAIL\", email);\r",
-									"pm.environment.set(\"NAME\", name);\r",
 									""
 								],
 								"type": "text/javascript",
@@ -288,7 +278,14 @@
 								"exec": [
 									"pm.test(\"Status code is 200 - OK\", function () {\r",
 									"    pm.response.to.have.status(200);\r",
-									"});"
+									"});\r",
+									"\r",
+									"let jsonData = pm.response.json();\r",
+									"\r",
+									"// Access nested fields inside the user object\r",
+									"pm.environment.set(\"EMAIL\", jsonData.user.email);\r",
+									"pm.environment.set(\"NAME\", jsonData.user.name);\r",
+									""
 								],
 								"type": "text/javascript",
 								"packages": {}
@@ -310,7 +307,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"email\": \"\",\r\n    \"name\": \"\"\r\n}",
+							"raw": "{\r\n    \"email\": \"{{$randomEmail}}\",\r\n    \"name\": \"{{$randomUserName}}\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -339,15 +336,6 @@
 							"listen": "prerequest",
 							"script": {
 								"exec": [
-									"// Parse the raw JSON body as an object\r",
-									"let body = JSON.parse(pm.request.body.raw);\r",
-									"\r",
-									"// Access fields\r",
-									"let password = body.password;\r",
-									"\r",
-									"// You can also store them as environment variables\r",
-									"pm.environment.set(\"PASSWORD\", password);\r",
-									"\r",
 									""
 								],
 								"type": "text/javascript",
@@ -382,7 +370,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"oldPassword\": \"{{PASSWORD}}\",\r\n    \"password\": \"rHltdMwQmfP4usfa\"\r\n}",
+							"raw": "{\r\n    \"oldPassword\": \"rHltdMwQmfP4usfa\",\r\n    \"password\": \"Fact@12345678\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
